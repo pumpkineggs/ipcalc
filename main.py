@@ -1,5 +1,5 @@
-default_ip = (192, 168, 0, 1)
-prefix = 16
+default_ip = (192, 168, 0, 100)
+prefix = 8
 default_mask_decimal = (255, 255, 255, 0)
 mask_full_octets = prefix // 8
 mask_remain_bits = prefix % 8
@@ -34,13 +34,19 @@ if mask_full_octets > 0:
         print "New mask", '.'.join(str(e) for e in mask_decimal)
         print 'New mask binary: ', mask_binary
 wildcard_binary = []
-print 'Initial wildcard: ', wildcard_binary
-wc_str = ''
-for i in range(4):
+for i in range(len(mask_binary)):
     wildcard_binary.insert(i, '')
     for bit in mask_binary[i]:
         if bit == '1':
             wildcard_binary[i] += '0'
         else:
             wildcard_binary[i] += '1'
-print wildcard_binary
+print 'Wildcard binary: ', wildcard_binary
+for i in range(len(wildcard_decimal)):
+    wildcard_decimal[i] = int(wildcard_binary[i], 2)
+print 'Wildcard decimal: ', wildcard_decimal
+net_address = [0, 0, 0, 0]
+for i in range(4):
+    net_address[i] = bin(default_ip[i] & mask_decimal[i])
+    net_address[i] = int(net_address[i], 2)
+print 'Network address: ', net_address
